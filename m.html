@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
-/* viewport switch: wide screens get the desktop build; ?m forces this one */
+/* Viewport switch. Must stay below the viewport meta above: until that meta is
+   parsed a phone reports innerWidth 980, which sent phones to the wrong build.
+   screen.width is not affected by the meta at all, so the smaller of the two is
+   the honest number. ?full forces desktop, ?m forces mobile. */
 (function () {
   try {
     if (new URLSearchParams(location.search).has('m')) return;
-    if (window.innerWidth > 768) location.replace('index.html' + location.hash);
+    var w = Math.min(window.innerWidth || Infinity,
+                     (window.screen && window.screen.width) || Infinity);
+    if (w >  768) location.replace('index.html' + location.hash);
   } catch (e) {}
 })();
 </script>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>X-ON-X – Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
