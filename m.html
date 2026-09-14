@@ -563,26 +563,26 @@ body {
 .xx-section--warm { background: transparent !important; }
 .xx-closing { background: transparent !important; }
 
-/* v7: Deep cloud sky hero */
+/* v7: Deep cloud sky hero — seamless single layer, no tiling */
 .xx-page::before {
   background:
-    radial-gradient(ellipse 65% 250px at 60% 150px, rgba(195, 218, 240, 0.4) 0%, rgba(200, 220, 240, 0.15) 50%, transparent 75%),
-    radial-gradient(ellipse 40% 200px at 15% 550px, rgba(190, 215, 238, 0.35) 0%, rgba(200, 222, 242, 0.1) 55%, transparent 78%),
-    radial-gradient(ellipse 55% 180px at 75% 750px, rgba(195, 220, 242, 0.38) 0%, rgba(205, 225, 240, 0.12) 50%, transparent 72%),
-    radial-gradient(ellipse 35% 160px at 40% 900px, rgba(188, 212, 235, 0.3) 0%, transparent 70%),
-    radial-gradient(ellipse 70% 220px at 50% 200px, rgba(255, 253, 245, 1) 0%, rgba(250, 246, 236, 0.75) 28%, transparent 62%),
-    radial-gradient(ellipse 50% 180px at 85% 350px, rgba(255, 252, 242, 0.95) 0%, rgba(248, 244, 232, 0.6) 30%, transparent 65%),
-    radial-gradient(ellipse 55% 190px at 12% 300px, rgba(254, 250, 240, 0.95) 0%, rgba(248, 244, 232, 0.55) 32%, transparent 68%),
-    radial-gradient(ellipse 45% 150px at 30% 80px, rgba(255, 252, 244, 0.9) 0%, rgba(248, 244, 234, 0.5) 35%, transparent 68%),
-    radial-gradient(ellipse 60% 170px at 65% 600px, rgba(255, 252, 242, 0.92) 0%, rgba(250, 246, 234, 0.6) 30%, transparent 66%),
-    radial-gradient(ellipse 50% 160px at 20% 750px, rgba(255, 253, 245, 0.9) 0%, rgba(250, 246, 236, 0.5) 32%, transparent 65%),
-    radial-gradient(ellipse 40% 140px at 90% 100px, rgba(252, 250, 242, 0.85) 0%, rgba(248, 244, 234, 0.4) 38%, transparent 65%),
-    radial-gradient(ellipse 55% 150px at 45% 480px, rgba(255, 252, 244, 0.88) 0%, rgba(250, 246, 234, 0.5) 30%, transparent 64%),
-    radial-gradient(ellipse 45% 120px at 55% 430px, rgba(180, 200, 222, 0.28) 0%, transparent 60%),
-    radial-gradient(ellipse 35% 100px at 35% 250px, rgba(175, 198, 220, 0.22) 0%, transparent 55%);
-  background-size: 100% 1000px !important;
-  background-repeat: repeat-y !important;
-  filter: blur(15px);
+    radial-gradient(ellipse 65% 25% at 60% 15%, rgba(195, 218, 240, 0.4) 0%, rgba(200, 220, 240, 0.15) 50%, transparent 75%),
+    radial-gradient(ellipse 40% 20% at 15% 55%, rgba(190, 215, 238, 0.35) 0%, rgba(200, 222, 242, 0.1) 55%, transparent 78%),
+    radial-gradient(ellipse 55% 18% at 75% 75%, rgba(195, 220, 242, 0.38) 0%, rgba(205, 225, 240, 0.12) 50%, transparent 72%),
+    radial-gradient(ellipse 35% 16% at 40% 90%, rgba(188, 212, 235, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 22% at 50% 20%, rgba(255, 253, 245, 1) 0%, rgba(250, 246, 236, 0.75) 28%, transparent 62%),
+    radial-gradient(ellipse 50% 18% at 85% 35%, rgba(255, 252, 242, 0.95) 0%, rgba(248, 244, 232, 0.6) 30%, transparent 65%),
+    radial-gradient(ellipse 55% 19% at 12% 30%, rgba(254, 250, 240, 0.95) 0%, rgba(248, 244, 232, 0.55) 32%, transparent 68%),
+    radial-gradient(ellipse 45% 15% at 30% 8%, rgba(255, 252, 244, 0.9) 0%, rgba(248, 244, 234, 0.5) 35%, transparent 68%),
+    radial-gradient(ellipse 60% 17% at 65% 60%, rgba(255, 252, 242, 0.92) 0%, rgba(250, 246, 234, 0.6) 30%, transparent 66%),
+    radial-gradient(ellipse 50% 16% at 20% 75%, rgba(255, 253, 245, 0.9) 0%, rgba(250, 246, 236, 0.5) 32%, transparent 65%),
+    radial-gradient(ellipse 40% 14% at 90% 10%, rgba(252, 250, 242, 0.85) 0%, rgba(248, 244, 234, 0.4) 38%, transparent 65%),
+    radial-gradient(ellipse 55% 15% at 45% 48%, rgba(255, 252, 244, 0.88) 0%, rgba(250, 246, 234, 0.5) 30%, transparent 64%),
+    radial-gradient(ellipse 45% 12% at 55% 43%, rgba(180, 200, 222, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 35% 10% at 35% 25%, rgba(175, 198, 220, 0.22) 0%, transparent 55%);
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  filter: blur(clamp(9px, 1vw + 5px, 15px));
   -webkit-mask-image: none !important;
   mask-image: none !important;
 }
@@ -748,7 +748,7 @@ body { background: var(--cream) !important; }
 .xx-showcase__track { display: flex; gap: 7px; width: 100%; overflow: visible; }
 .xx-pcard { flex: 1 1 0 !important; min-width: 0; flex-grow: 1; opacity: 0.68; will-change: flex-grow, opacity; transition: flex-grow 800ms cubic-bezier(.25,.1,.25,1), opacity 600ms ease; }
 .xx-pcard.active { flex-grow: 4; opacity: 1; }
-.xx-pcard__media { position: relative; width: 100%; height: 64vh; max-height: 600px; min-height: 380px; aspect-ratio: auto; overflow: hidden; border-radius: 0; }
+.xx-pcard__media { position: relative; width: 100%; height: auto; max-height: none; min-height: 0; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 0; }
 .xx-pcard__media img { object-position: center center; }
 .xx-pcard__cap {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 22px 22px 24px;
@@ -761,7 +761,7 @@ body { background: var(--cream) !important; }
 .xx-pcard__cap .xx-pcard__stat { margin-top: 12px; }
 .xx-pcard__cap .xx-pcard__num { color: var(--lime); }
 .xx-pcard__cap .xx-pcard__unit { color: rgba(255,255,255,0.78); }
-@media (max-width: 920px) { .xx-pcard.active { flex-grow: 4; } .xx-pcard__media { height: 52vh; } }
+@media (max-width: 920px) { .xx-pcard.active { flex-grow: 4; } .xx-pcard__media { aspect-ratio: 3 / 4; } }
 
 /* v26: Hero composition */
 .xx-hero__inner { flex: 0 0 auto !important; }
@@ -952,10 +952,10 @@ body { background: var(--cream) !important; }
 .xx-showcase--v35 .xx-pcard__media {
   position: relative !important;
   width: 100% !important;
-  height: 64vh !important;
-  max-height: 600px !important;
-  min-height: 380px !important;
-  aspect-ratio: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: 3 / 4 !important;
   overflow: hidden !important;
   border-radius: 0 !important;
 }
@@ -1025,7 +1025,7 @@ body { background: var(--cream) !important; }
 
 @media (max-width: 920px) {
   .xx-showcase--v35 .xx-pcard.active { flex-grow: 4 !important; }
-  .xx-showcase--v35 .xx-pcard__media { height: 52vh !important; }
+  .xx-showcase--v35 .xx-pcard__media { aspect-ratio: 3 / 4 !important; height: auto !important; }
   .xx-showcase--v35 .xx-showcase__tab.active { flex-grow: 4 !important; }
 }
 
@@ -1263,10 +1263,7 @@ body { background: var(--cream) !important; }
     opacity: 1 !important;
   }
   .xx-showcase--v35 .xx-pcard.active { flex-grow: 0 !important; }
-  .xx-showcase--v35 .xx-pcard__media {
-    height: 48vh !important;
-    min-height: 280px !important;
-  }
+  .xx-showcase--v35 .xx-pcard__media { height: auto !important; min-height: 0 !important; aspect-ratio: 3 / 4 !important; }
   .xx-showcase--v35 .xx-pcard__cap {
     opacity: 1 !important;
     transform: none !important;
@@ -1583,6 +1580,23 @@ body { background: var(--cream) !important; }
   .xx-wip-modal__body { font-size: 14px; margin-bottom: 24px; }
   .xx-wip-modal__close { top: 14px; right: 14px; width: 36px; height: 36px; font-size: 18px; }
 }
+/* Matter caption — cat at top, title+stat grouped at bottom */
+[data-showcase="evidence"] .xx-pcard__cap {
+  top: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: linear-gradient(to bottom, rgba(17,17,22,0.45) 0%, rgba(17,17,22,0) 25%, rgba(17,17,22,0) 55%, rgba(17,17,22,0.77) 100%) !important;
+}
+[data-showcase="evidence"] .xx-pcard__cat {
+  flex: 0 0 auto !important;
+}
+[data-showcase="evidence"] .xx-pcard__title {
+  margin-top: auto !important;
+}
+[data-showcase="evidence"] .xx-pcard__stat {
+  flex: 0 0 auto !important;
+}
 </style>
 </head>
 <body>
@@ -1846,7 +1860,7 @@ body { background: var(--cream) !important; }
           <div class="xx-trigger-dock">
             <a class="xx-trigger-btn" href="#">
               <span class="xx-trigger-btn__num">I/01</span>
-              <h3 class="xx-trigger-btn__title">Business Interests</h3>
+              <h3 class="xx-trigger-btn__title">Business Ownership</h3>
               <p class="xx-trigger-btn__desc">Structuring and protecting personal stakes in businesses &ndash; shareholder agreements, governance, and exit planning.</p>
               <div class="xx-trigger-btn__tags">
                 <span class="xx-trigger-btn__tag">Equity</span>
@@ -1868,7 +1882,7 @@ body { background: var(--cream) !important; }
             </a>
             <a class="xx-trigger-btn" href="#">
               <span class="xx-trigger-btn__num">I/03</span>
-              <h3 class="xx-trigger-btn__title">Private Portfolio</h3>
+              <h3 class="xx-trigger-btn__title">Investment Portfolio</h3>
               <p class="xx-trigger-btn__desc">Personal holding vehicles, investment structuring, and tax-efficient portfolio management across jurisdictions.</p>
               <div class="xx-trigger-btn__tags">
                 <span class="xx-trigger-btn__tag">Holdings</span>
@@ -1946,7 +1960,7 @@ body { background: var(--cream) !important; }
         <div class="xx-pcard__media"><img src="img/bettter.webp" alt="BETTTER">
           <div class="xx-pcard__cap">
             <span class="xx-pcard__cat">Fashion &amp; Luxury</span>
-            <h3 class="xx-pcard__title">Structuring international expansion for the first Ukrainian upcycling brand, LVMH Award winner sold worldwide</h3>
+            <h3 class="xx-pcard__title">Structuring international expansion for the first Ukrainian upcycling brand</h3>
             <div class="xx-pcard__stat"><span class="xx-pcard__num">4</span><span class="xx-pcard__unit">markets &middot; UA, US, UK, EU</span></div>
           </div>
         </div>
@@ -1973,7 +1987,7 @@ body { background: var(--cream) !important; }
         <div class="xx-pcard__media"><img src="img/mako.webp" alt="ma-ko">
           <div class="xx-pcard__cap">
             <span class="xx-pcard__cat">Tech &amp; IT</span>
-            <h3 class="xx-pcard__title">New corporate and operational structure for Ukrainian software development company</h3>
+            <h3 class="xx-pcard__title">New corporate and operational structure for Ukrainian IT company</h3>
             <div class="xx-pcard__stat"><span class="xx-pcard__num">0%</span><span class="xx-pcard__unit">tax &middot; on retained profit</span></div>
           </div>
         </div>
