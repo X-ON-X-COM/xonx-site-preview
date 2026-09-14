@@ -1601,22 +1601,6 @@ body { background: var(--cream) !important; }
   flex: 0 0 auto !important;
 }
 
-/* ── One continuous page ground ─────────────────────────────────────────────
-   The two card rails, the stats band and the evidence section each painted a
-   flat, brighter colour than the page behind them. Their padding then showed
-   as white strips between the cream sections, most visibly under the cards on
-   a phone. They now sit on the page's own cream and noise, so the sections run
-   into each other with no band of a different colour anywhere. Mobile only:
-   on desktop the bands are deliberate and stay. Removing this block brings
-   them back here too.                                                       */
-.xx-showcase--band,
-[data-showcase="insights"],
-[data-showcase="evidence"],
-.xx-section--how-stats,
-.xx-section:has(.xx-evidence) {
-  background: transparent !important;
-}
-
 /* ── Tight section joins (mobile) ───────────────────────────────────────────
    Each boundary stacked one section's bottom padding on the next one's top
    padding, so 100 to 136 empty pixels sat between the last line of one block
