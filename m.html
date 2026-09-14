@@ -1274,8 +1274,11 @@ body { background: var(--cream) !important; }
   }
 
   /* ── Showcase band padding ── */
+  /* The bottom padding used to be 64px, which left an empty white band under
+     the cards: the rail's background is lighter than the cream sections around
+     it, so the slack read as a gap rather than as breathing room. */
   .xx-showcase--band {
-    padding: 48px 0 64px !important;
+    padding: 44px 0 28px !important;
   }
 
   /* ── What We Do section ── */
