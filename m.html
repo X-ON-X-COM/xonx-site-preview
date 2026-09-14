@@ -1600,6 +1600,21 @@ body { background: var(--cream) !important; }
 [data-showcase="evidence"] .xx-pcard__stat {
   flex: 0 0 auto !important;
 }
+
+/* ── One continuous page ground ─────────────────────────────────────────────
+   The two card rails, the stats band and the evidence section each painted a
+   flat, brighter colour than the page behind them. Their padding then showed
+   as white strips between the cream sections, most visibly under the cards on
+   a phone. They now sit on the page's own cream and noise, so the sections run
+   into each other with no band of a different colour anywhere.
+   Removing this block brings the bands back.                                */
+.xx-showcase--band,
+[data-showcase="insights"],
+[data-showcase="evidence"],
+.xx-section--how-stats,
+.xx-section:has(.xx-evidence) {
+  background: transparent !important;
+}
 </style>
 </head>
 <body>
