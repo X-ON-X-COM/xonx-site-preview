@@ -1,6 +1,6 @@
-# X-ON-X site preview
+# X-ON-X website
 
-Test deploy of the new home page on GitHub Pages, ahead of the move to the domain.
+**Live at https://www.x-on-x.com since 15.09.2026**, served by GitHub Pages from this repository. The apex `x-on-x.com` redirects to `www` (the same direction the old Webflow site used, so browsers holding its cached 301 do not loop), `http` redirects to `https`, and the Let's Encrypt certificate covers both names and renews itself. DNS stays at Domain.com: apex `A` records point at GitHub Pages (185.199.108–111.153), `www` is a `CNAME` to `x-on-x-com.github.io`; the mail records (MX, SPF, DKIM, DMARC) were not touched.
 
 - `index.html` — desktop build (`home-standalone-real-headlines-insights-images.html`, 14.09.2026).
 - `m.html` — mobile build (`home-standalone-final-mobile-v2.html`, 14.09.2026). Kept as a separate file on purpose: some hero elements are hidden on mobile and must not leak into the desktop layout.
