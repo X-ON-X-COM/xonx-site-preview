@@ -1612,6 +1612,25 @@ body { background: var(--cream) !important; }
 .xx-section--how-stats { padding-top: 12px !important; padding-bottom: 12px !important; }
 .xx-closing { padding-top: 12px !important; padding-bottom: 12px !important; }
 .xx-footer { padding-top: 28px !important; }
+
+/* ── Cloud sky: one skyful per screen, not one stretched over the page ──────
+   The layer is `position: absolute; inset: 0` inside .xx-page, so with
+   `background-size: 100% 100%` the fourteen gradients were stretched over the
+   whole 5173px document: every cloud came out five times too tall and the
+   blur turned them into grey smears below the hero. Pinned to the viewport
+   instead, each cloud keeps the size it has in the hero, the sky never tiles
+   and the blurred layer is one screen tall rather than a whole document.     */
+.xx-page::before {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
 </style>
 </head>
 <body>
