@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('m')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w >  768) location.replace('index.html?v=20260915c' + location.hash);
+    if (w >  768) location.replace('index.html?v=20260915d' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1059,7 +1059,11 @@ body { background: var(--cream) !important; }
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 2.5px !important;
+    /* Whole pixels only. With a 0.5px hairline and a 2.5px gap the two lines
+       landed on different sub-pixel boundaries, so a phone rounded one of them
+       to a single device pixel and the other to two: they looked like lines of
+       different weight. */
+    gap: 3px !important;
     cursor: pointer !important;
     padding: 10px 6px !important;
     margin-left: 4px !important;
@@ -1067,7 +1071,7 @@ body { background: var(--cream) !important; }
   .xx-nav__burger span {
     display: block !important;
     width: 16px !important;
-    height: 0.5px !important;
+    height: 1px !important;
     background: var(--fg1) !important;
     border-radius: 0 !important;
     transition: transform 300ms ease, opacity 200ms ease !important;
