@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('m')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w >  768) location.replace('index.html?v=20260915b' + location.hash);
+    if (w >  768) location.replace('index.html?v=20260915c' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1274,11 +1274,8 @@ body { background: var(--cream) !important; }
   }
 
   /* ── Showcase band padding ── */
-  /* The bottom padding used to be 64px, which left an empty white band under
-     the cards: the rail's background is lighter than the cream sections around
-     it, so the slack read as a gap rather than as breathing room. */
   .xx-showcase--band {
-    padding: 44px 0 28px !important;
+    padding: 48px 0 64px !important;
   }
 
   /* ── What We Do section ── */
@@ -1600,18 +1597,6 @@ body { background: var(--cream) !important; }
 [data-showcase="evidence"] .xx-pcard__stat {
   flex: 0 0 auto !important;
 }
-
-/* ── Tight section joins (mobile) ───────────────────────────────────────────
-   Each boundary stacked one section's bottom padding on the next one's top
-   padding, so 100 to 136 empty pixels sat between the last line of one block
-   and the first line of the next. Every join is now 12px either side, about
-   the page's own line rhythm, so the sections read as one continuous scroll.  */
-.xx-hero { padding-bottom: 12px !important; }
-.xx-showcase--band { padding: 12px 0 12px !important; }
-.xx-section--warm { padding-top: 12px !important; padding-bottom: 12px !important; }
-.xx-section--how-stats { padding-top: 12px !important; padding-bottom: 12px !important; }
-.xx-closing { padding-top: 12px !important; padding-bottom: 12px !important; }
-.xx-footer { padding-top: 28px !important; }
 
 /* ── Cloud sky: one skyful per screen, not one stretched over the page ──────
    The layer is `position: absolute; inset: 0` inside .xx-page, so with
