@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('m')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w >  768) location.replace('index.html?v=20260915f' + location.hash);
+    if (w >  768) location.replace('index.html?v=20260915g' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1190,10 +1190,18 @@ body { background: var(--cream) !important; }
     width: auto !important;
     display: flex !important;
   }
+  .xx-cta-dock--home {
+    width: 100% !important;
+  }
   .xx-cta-dock--home .xx-btn {
-    flex: 0 0 auto !important;
+    /* Was `flex: 0 0 auto` with 56px of side padding, which made the pair
+       379px wide against the 350px of usable width on a 390px phone: the hero
+       clips its overflow, so the right end of "What we do" was cut off on
+       every screen narrower than about 418px. The two now share the row and
+       fit from 320px up. */
+    flex: 1 1 0 !important;
     font-size: 10px !important;
-    padding: 12px 56px !important;
+    padding: 12px 14px !important;
     justify-content: center !important;
     min-width: 0 !important;
     border-radius: 999px !important;
