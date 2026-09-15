@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('full')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w <= 768) location.replace('m.html?v=20260915a' + location.hash);
+    if (w <= 768) location.replace('m.html?v=20260915b' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1115,6 +1115,19 @@ body { background: var(--cream) !important; }
 .xx-showcase--v35 .xx-pcard[data-matter="vc"] .xx-pcard__media {
   overflow: hidden !important;
 }
+
+/* ── Mail addresses are links ───────────────────────────────────────────────
+   The closing block's addresses were plain text and the footer's was wired to
+   href="#", which the capture-phase handler turns into the "coming soon"
+   modal. They are mailto links now; the modal handler only swallows an exact
+   href="#", so these reach the mail app.                                    */
+.xx-closing__partner-mail a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17, 17, 22, 0.25);
+  padding-bottom: 1px;
+}
+.xx-closing__partner-mail a:hover { border-bottom-color: currentColor; }
 </style>
 </head>
 <body>
@@ -1561,12 +1574,12 @@ body { background: var(--cream) !important; }
         <div style="margin-bottom: 32px;">
           <div class="xx-closing__partner-name">Oleg Kotliar</div>
           <div class="xx-closing__partner-role">Corporate Structuring &amp; M&amp;A</div>
-          <div class="xx-closing__partner-mail">ok@x-on-x.com</div>
+          <div class="xx-closing__partner-mail"><a href="mailto:ok@x-on-x.com">ok@x-on-x.com</a></div>
         </div>
         <div>
           <div class="xx-closing__partner-name">Viktoriia Kotliar</div>
           <div class="xx-closing__partner-role">International Tax &amp; Trade</div>
-          <div class="xx-closing__partner-mail">vk@x-on-x.com</div>
+          <div class="xx-closing__partner-mail"><a href="mailto:vk@x-on-x.com">vk@x-on-x.com</a></div>
         </div>
       </div>
     </div>
@@ -1617,7 +1630,7 @@ body { background: var(--cream) !important; }
         <div class="xx-footer__col-title">Legal</div>
         <a href="#">Privacy Policy</a>
         <a href="#">Terms</a>
-        <a href="#" style="margin-top: 24px; color: #C9FF33;">ok@x-on-x.com</a>
+        <a href="mailto:ok@x-on-x.com" style="margin-top: 24px; color: #C9FF33;">ok@x-on-x.com</a>
       </div>
     </div>
     <div class="xx-footer__bot">
