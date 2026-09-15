@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('m')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w >  768) location.replace('index.html' + location.hash);
+    if (w >  768) location.replace('index.html?v=20260915a' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1628,8 +1628,17 @@ body { background: var(--cream) !important; }
   bottom: auto !important;
   width: 100vw !important;
   height: 100vh !important;
-  background-size: 100% 100% !important;
-  background-repeat: no-repeat !important;
+  /* Sized in viewport units and set to tile, so the clouds keep their scale
+     even in a webview that ignores `position: fixed` and leaves the layer as
+     tall as the document: it then repeats one skyful per screen instead of
+     stretching one over the whole page. While fixed works, the element is
+     exactly one screen tall, so nothing ever repeats. */
+  background-size: 100% 100vh !important;
+  background-repeat: repeat-y !important;
+  /* Plain pixel blur rather than blur(clamp(...)): an engine that does not
+     take a clamp() inside filter drops the whole declaration, and the clouds
+     then render unblurred. */
+  filter: blur(11px) !important;
 }
 </style>
 </head>
