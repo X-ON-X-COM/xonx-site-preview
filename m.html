@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('m')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w >  768) location.replace('index.html?v=20260915e' + location.hash);
+    if (w >  768) location.replace('index.html?v=20260915f' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -1730,6 +1730,14 @@ body { background: var(--cream) !important; }
 .xx-no-flexgap .xx-hero__inner--split > .xx-hero__right { margin-top: 24px !important; }
 .xx-no-flexgap .xx-closing__side      > * + * { margin-top: 20px !important; }
 .xx-no-flexgap .xx-footer__bot        > * + * { margin-top: 8px !important; }
+
+/* ── The nav's "What We Do" jumps to its section ────────────────────────────
+   The other nav items have no page to go to yet and stay on href="#", which
+   the capture-phase handler turns into the "coming soon" modal. This one has
+   a section, so it carries the same target as the hero's ghost button, and the
+   section reserves room for the sticky nav bar so the landing is not tucked
+   underneath it.                                                            */
+#what-we-do { scroll-margin-top: 72px; }
 </style>
 </head>
 <body>
@@ -1747,7 +1755,7 @@ body { background: var(--cream) !important; }
       <span class="xx-nav__wordmark">X-ON-X</span>
     </div>
     <nav class="xx-nav__links">
-      <a class="xx-nav__link" href="#">What We Do</a>
+      <a class="xx-nav__link" href="#what-we-do">What We Do</a>
       <a class="xx-nav__link" href="#">Fashion</a>
       <a class="xx-nav__link" href="#">Investments</a>
       <a class="xx-nav__link" href="#">Miltech</a>
