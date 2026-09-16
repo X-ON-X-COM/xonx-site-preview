@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <!-- The nav mark, with the stroke widened from 3 to 12 so it reads at 16px.
+       Graphite on light tab bars, cream on dark ones; the lime dot stays. -->
+  <style>
+    .x { stroke: #111116; }
+    @media (prefers-color-scheme: dark) { .x { stroke: #FAFAF5; } }
+  </style>
+  <line class="x" x1="36" y1="36" x2="124" y2="124" stroke-width="12" stroke-linecap="round"/>
+  <line class="x" x1="124" y1="36" x2="36" y2="124" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="80" cy="80" r="14" fill="#C9FF33"/>
+</svg>
