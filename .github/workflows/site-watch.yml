@@ -24,7 +24,8 @@ jobs:
       - name: Check the live site
         id: check
         run: |
-          set -uo pipefail
+          set +e          # the runner starts us with -e; these checks are meant to
+          set -uo pipefail # collect every problem, not die on the first non-zero
           fail() { echo "- $1" >> problems.txt; }
           : > problems.txt
 
@@ -59,7 +60,7 @@ jobs:
           fi
 
           # 5. nothing third-party crept into the page
-          hosts=$(grep -oE 'src="https?://[^"]+' served.html | sed -E 's|src="https?://([^/"]+).*|\1|' | sort -u)
+          hosts=$(grep -oE 'src="https?://[^"]+' served.html | sed -E 's|src="https?://([^/"]+).*|\1|' | sort -u || true)
           for h in $hosts; do
             case "$h" in
               fonts.googleapis.com|fonts.gstatic.com|www.x-on-x.com) ;;
