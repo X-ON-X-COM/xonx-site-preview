@@ -13,7 +13,7 @@
     if (new URLSearchParams(location.search).has('full')) return;
     var w = Math.min(window.innerWidth || Infinity,
                      (window.screen && window.screen.width) || Infinity);
-    if (w <= 768) location.replace('m.html?v=20260916f' + location.hash);
+    if (w <= 768) location.replace('m.html?v=20260916g' + location.hash);
   } catch (e) {}
 })();
 </script>
@@ -755,6 +755,11 @@ body { background: var(--cream) !important; }
 
 /* v25: Hero fills screen */
 .xx-hero { min-height: calc(100vh - 72px) !important; justify-content: center; }
+/* 16.09.2026: the hero dock («What brings you here?») is absolute at bottom: 32px and
+   stands about 140px tall, but the hero kept only 100px of bottom padding, so on a
+   short window (about 720px and less) the centred CTA row landed under the dock's
+   label. Desktop only: below 920px the dock is static and in flow. */
+@media (min-width: 921px) { .xx-hero { padding-bottom: 196px !important; } }
 
 /* v25: How We Work dividers grey */
 .xx-how-stat { border-top-color: var(--gray) !important; }
