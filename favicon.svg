@@ -1,13 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Іконка вкладки. Графітовий квадрат, бо на 16px тонкий X-марк на прозорому
-       тлі зникає; білий марк на темному це дозволений варіант A2 фірмового
-       стандарту. Побудова марки канонічна (промені 19–45 = ті самі 44–116 у полі
-       160, крапка = 1.75× штриха), вага — офіційна оптична компенсація для 16px:
-       штрих удвічі товщий за канон. Не потовщувати далі: у стандарті це прямий
-       «DON'T». Великий apple-icon.png зроблено тією ж побудовою, але канонічною
-       вагою — він показується великим. -->
-  <rect width="64" height="64" rx="14" fill="#111116"/>
-  <g stroke="#FAFAF5" stroke-width="1.6" stroke-linecap="round">
+  <!-- The brand mark as it is in portal/public/brand/logo.png: graphite strokes and the
+       lime dot on the brand cream, no dark tile. Geometry is the standard's (rays 19–45
+       here = 44–116 in the 160 field, dot 1.75× the stroke); the stroke is doubled, which
+       is the optical compensation the standard allows for 16px and nothing more. -->
+  <rect width="64" height="64" rx="14" fill="#F5F7EE"/>
+  <g stroke="#111116" stroke-width="1.6" stroke-linecap="round">
     <line x1="19" y1="19" x2="45" y2="45"/>
     <line x1="45" y1="19" x2="19" y2="45"/>
   </g>
