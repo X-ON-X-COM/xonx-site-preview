@@ -677,10 +677,27 @@ body { background: var(--cream) !important; }
 .xx-section--graphite > .xx-section__inner,
 .xx-closing__inner, .xx-footer__inner { max-width: 1440px !important; }
 
+/* v24: the side gutter the full-bleed layout forgot. The tinted bands drop their
+   own horizontal padding on purpose, so the band colour runs edge to edge, and
+   their inner column was left with padding 0. Above 1440px nobody noticed: the
+   max-width kept the text off the edge. At exactly 1440, and on every laptop
+   narrower than that, the headings sat flush against the window. 48 is the
+   figure .xx-section itself uses, so the bands now line up with the sections
+   that never lost their padding. */
+.xx-section--warm > .xx-section__inner,
+.xx-section--graphite > .xx-section__inner,
+.xx-section--how-stats > .xx-section__inner,
+.xx-closing__inner,
+.xx-footer__inner,
+.xx-footer__bot { padding-left: 48px; padding-right: 48px; box-sizing: border-box; }
+
 /* ── SHOWCASE (Legora-style auto-cycling tabs) ── */
 .xx-showcase { max-width: 1440px; margin: 0 auto; padding: 72px 0 96px; position: relative; }
 .xx-showcase--band { max-width: none; padding: 72px 0 96px; background: #FFFEFA; }
 .xx-showcase--band > * { max-width: 1440px; margin-left: auto; margin-right: auto; padding-left: 0; padding-right: 0; box-sizing: border-box; }
+/* v24, continued: same 48px gutter. This has to sit after the rule above,
+   which zeroes the padding at the same specificity. */
+.xx-showcase, .xx-showcase--band > * { padding-left: 48px; padding-right: 48px; }
 .xx-showcase__head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 4px; }
 .xx-showcase__label { font: var(--t-mono-sm); letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg3); display: flex; align-items: center; gap: 10px; }
 .xx-showcase__label::before { content: ''; width: 8px; height: 8px; background: var(--lime); border-radius: 50%; box-shadow: 0 0 0 4px rgba(201,255,51,0.18); }
