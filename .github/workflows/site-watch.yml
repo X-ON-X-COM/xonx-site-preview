@@ -1,0 +1,99 @@
+name: site-watch
+
+# Hourly outside check of the live site: is it up, does it still redirect the way
+# we set it up, is the certificate fresh, and is the HTML that Fastly serves still
+# byte-identical to what is committed here. The last one is the defacement check:
+# if someone pushes to this repo or takes the domain over, the hash stops matching.
+# Failures open (or comment on) an issue, which mails everyone watching the repo.
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the live site
+        id: check
+        run: |
+          set -uo pipefail
+          fail() { echo "- $1" >> problems.txt; }
+          : > problems.txt
+
+          # 1. the page itself
+          code=$(curl -sS -o served.html -w '%{http_code}' https://www.x-on-x.com/)
+          [ "$code" = "200" ] || fail "https://www.x-on-x.com/ answered $code, not 200"
+
+          server=$(curl -sSI https://www.x-on-x.com/ | tr -d '\r' | awk -F': ' 'tolower($1)=="server"{print $2}')
+          [ "$server" = "GitHub.com" ] || fail "served by '$server', not GitHub.com (domain taken over?)"
+
+          # 2. the entry points still land on www over https, one hop each
+          for url in http://x-on-x.com/ https://x-on-x.com/ http://www.x-on-x.com/; do
+            loc=$(curl -sSI "$url" | tr -d '\r' | awk -F': ' 'tolower($1)=="location"{print $2}')
+            [ "$loc" = "https://www.x-on-x.com/" ] || fail "$url redirects to '$loc', expected https://www.x-on-x.com/"
+          done
+
+          # 3. certificate has more than three weeks left
+          end=$(echo | openssl s_client -connect www.x-on-x.com:443 -servername www.x-on-x.com 2>/dev/null \
+                | openssl x509 -noout -enddate | cut -d= -f2)
+          left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
+          echo "certificate expires $end ($left days)"
+          [ "$left" -gt 21 ] || fail "certificate expires in $left days ($end), GitHub should have renewed it by now"
+
+          # 4. the served HTML is what this repo says it should be
+          a=$(sha256sum served.html | cut -d' ' -f1)
+          b=$(sha256sum index.html  | cut -d' ' -f1)
+          if [ "$a" != "$b" ]; then
+            sleep 90   # a push may have landed while Fastly still had the old copy
+            curl -sS -o served.html https://www.x-on-x.com/
+            a=$(sha256sum served.html | cut -d' ' -f1)
+            [ "$a" = "$b" ] || fail "served HTML does not match index.html in this repo (served $a, repo $b)"
+          fi
+
+          # 5. nothing third-party crept into the page
+          hosts=$(grep -oE 'src="https?://[^"]+' served.html | sed -E 's|src="https?://([^/"]+).*|\1|' | sort -u)
+          for h in $hosts; do
+            case "$h" in
+              fonts.googleapis.com|fonts.gstatic.com|www.x-on-x.com) ;;
+              *) fail "page loads a script or image from an unexpected host: $h" ;;
+            esac
+          done
+
+          if [ -s problems.txt ]; then
+            echo "status=bad" >> "$GITHUB_OUTPUT"
+            cat problems.txt
+          else
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+            echo "all checks passed"
+          fi
+
+      - name: Report
+        if: steps.check.outputs.status == 'bad'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body="site-watch found problems at $(date -u '+%Y-%m-%d %H:%M UTC'):\n\n$(cat problems.txt)\n\nRun: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          existing=$(gh issue list --label site-watch --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            printf '%b' "$body" | gh issue comment "$existing" --body-file -
+          else
+            gh label create site-watch --color B60205 --description "Automated live-site check" 2>/dev/null || true
+            printf '%b' "$body" | gh issue create --title "site-watch: the live site failed a check" --label site-watch --body-file -
+          fi
+
+      - name: Close the issue once everything is green again
+        if: steps.check.outputs.status == 'ok'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for n in $(gh issue list --label site-watch --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "site-watch is green again."
+          done
