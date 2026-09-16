@@ -1071,14 +1071,17 @@ body { background: var(--cream) !important; }
    ============================================================ */
 @media (max-width: 768px) {
 
-  /* ── Global container padding ── */
+  /* ── Global container padding ──
+     28, not 20: the nav sits 12px off the edge and pads itself by 16, so its
+     text starts at 28. At 20 every heading below it hung a notch closer to the
+     screen edge than the nav above it, which is what reads as "too close". */
   .xx-section--warm > .xx-section__inner,
   .xx-section--graphite > .xx-section__inner,
   .xx-section--how-stats > .xx-section__inner,
   .xx-closing__inner,
   .xx-footer__inner,
-  .xx-footer__bot { padding-left: 20px !important; padding-right: 20px !important; }
-  .xx-showcase--band > * { padding-left: 20px !important; padding-right: 20px !important; }
+  .xx-footer__bot { padding-left: 28px !important; padding-right: 28px !important; }
+  .xx-showcase--band > * { padding-left: 28px !important; padding-right: 28px !important; }
 
   /* ── Nav with burger menu ── */
   .xx-nav {
@@ -1170,7 +1173,7 @@ body { background: var(--cream) !important; }
 
   /* ── Hero ── */
   .xx-hero {
-    padding: 48px 20px 80px !important;
+    padding: 48px 28px 80px !important;   /* same 28 as every other container */
     min-height: auto !important;
   }
   .xx-hero__inner { max-width: none !important; }
