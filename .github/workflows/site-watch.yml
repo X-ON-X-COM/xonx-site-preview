@@ -10,6 +10,11 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+    inputs:
+      selftest:
+        description: 'Report a fake problem, to prove the alarm still reaches people'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -28,6 +33,7 @@ jobs:
           set -uo pipefail # collect every problem, not die on the first non-zero
           fail() { echo "- $1" >> problems.txt; }
           : > problems.txt
+          [ "${{ inputs.selftest }}" = "true" ] && fail "selftest: this is a drill, the site is fine"
 
           # 1. the page itself
           code=$(curl -sS -o served.html -w '%{http_code}' https://www.x-on-x.com/)
