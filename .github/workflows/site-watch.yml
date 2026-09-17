@@ -4,33 +4,21 @@ name: site-watch
 # we set it up, is the certificate fresh, and is the HTML that Fastly serves still
 # byte-identical to what is committed here. The last one is the defacement check:
 # if someone pushes to this repo or takes the domain over, the hash stops matching.
-#
-# Problems open (or comment on) an issue AND go to Telegram straight away.
-# Once a day the 06:00 UTC run also sends a green summary, so a silent monitor
-# that has quietly died is visible: no morning line means the watch itself broke.
-#
-# Telegram needs two repo secrets, TG_BOT_TOKEN and TG_CHAT_ID. Without them the
-# workflow still runs and still files issues, it just says so in the log.
+# Failures open (or comment on) an issue, which mails everyone watching the repo.
 
 on:
   schedule:
-    - cron: '17 * * * *'   # hourly check
-    - cron: '0 6 * * *'    # the same check, plus the daily summary (09:00 Kyiv)
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       selftest:
         description: 'Report a fake problem, to prove the alarm still reaches people'
         type: boolean
         default: false
-      digest:
-        description: 'Send the daily summary now, even if nothing is wrong'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
   issues: write
-  actions: read
 
 jobs:
   watch:
@@ -44,9 +32,7 @@ jobs:
           set +e          # the runner starts us with -e; these checks are meant to
           set -uo pipefail # collect every problem, not die on the first non-zero
           fail() { echo "- $1" >> problems.txt; }
-          note() { echo "$1" >> facts.txt; }
           : > problems.txt
-          : > facts.txt
           [ "${{ inputs.selftest }}" = "true" ] && fail "selftest: this is a drill, the site is fine"
 
           # 1. the page itself
@@ -55,19 +41,12 @@ jobs:
 
           server=$(curl -sSI https://www.x-on-x.com/ | tr -d '\r' | awk -F': ' 'tolower($1)=="server"{print $2}')
           [ "$server" = "GitHub.com" ] || fail "served by '$server', not GitHub.com (domain taken over?)"
-          note "Сторінка: $code, Server: ${server:-нема}"
 
           # 2. the entry points still land on www over https, one hop each
-          good=0
           for url in http://x-on-x.com/ https://x-on-x.com/ http://www.x-on-x.com/; do
             loc=$(curl -sSI "$url" | tr -d '\r' | awk -F': ' 'tolower($1)=="location"{print $2}')
-            if [ "$loc" = "https://www.x-on-x.com/" ]; then
-              good=$((good + 1))
-            else
-              fail "$url redirects to '$loc', expected https://www.x-on-x.com/"
-            fi
+            [ "$loc" = "https://www.x-on-x.com/" ] || fail "$url redirects to '$loc', expected https://www.x-on-x.com/"
           done
-          note "Редиректи: $good з 3 ведуть на https://www.x-on-x.com/"
 
           # 3. certificate has more than three weeks left
           end=$(echo | openssl s_client -connect www.x-on-x.com:443 -servername www.x-on-x.com 2>/dev/null \
@@ -75,7 +54,6 @@ jobs:
           left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
           echo "certificate expires $end ($left days)"
           [ "$left" -gt 21 ] || fail "certificate expires in $left days ($end), GitHub should have renewed it by now"
-          note "Сертифікат: $left днів, до $(date -d "$end" '+%d.%m.%Y')"
 
           # 4. the served HTML is what this repo says it should be
           a=$(sha256sum served.html | cut -d' ' -f1)
@@ -86,18 +64,15 @@ jobs:
             a=$(sha256sum served.html | cut -d' ' -f1)
             [ "$a" = "$b" ] || fail "served HTML does not match index.html in this repo (served $a, repo $b)"
           fi
-          [ "$a" = "$b" ] && note "HTML: збігається з index.html у репо" || note "HTML: НЕ збігається з репо"
 
           # 5. nothing third-party crept into the page
-          strangers=0
           hosts=$(grep -oE 'src="https?://[^"]+' served.html | sed -E 's|src="https?://([^/"]+).*|\1|' | sort -u || true)
           for h in $hosts; do
             case "$h" in
               fonts.googleapis.com|fonts.gstatic.com|www.x-on-x.com) ;;
-              *) strangers=$((strangers + 1)); fail "page loads a script or image from an unexpected host: $h" ;;
+              *) fail "page loads a script or image from an unexpected host: $h" ;;
             esac
           done
-          [ "$strangers" = "0" ] && note "Сторонніх хостів: немає" || note "Сторонніх хостів: $strangers"
 
           if [ -s problems.txt ]; then
             echo "status=bad" >> "$GITHUB_OUTPUT"
@@ -106,19 +81,6 @@ jobs:
             echo "status=ok" >> "$GITHUB_OUTPUT"
             echo "all checks passed"
           fi
-
-      - name: Tell Telegram the site is broken
-        if: steps.check.outputs.status == 'bad'
-        env:
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-        run: |
-          set -uo pipefail
-          { printf 'site-watch: ПРОБЛЕМА НА САЙТІ\n%s Київ\n\n' "$(TZ=Europe/Kyiv date '+%d.%m %H:%M')"
-            cat problems.txt
-            printf '\nПрогін: %s/%s/actions/runs/%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
-          } > msg.txt
-          bash .github/send-telegram.sh msg.txt
 
       - name: Report
         if: steps.check.outputs.status == 'bad'
@@ -135,45 +97,10 @@ jobs:
           fi
 
       - name: Close the issue once everything is green again
-        id: recovered
         if: steps.check.outputs.status == 'ok'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -uo pipefail
-          closed=0
           for n in $(gh issue list --label site-watch --state open --json number --jq '.[].number'); do
             gh issue close "$n" --comment "site-watch is green again."
-            closed=$((closed + 1))
           done
-          echo "closed=$closed" >> "$GITHUB_OUTPUT"
-
-      - name: Tell Telegram the site is back
-        if: steps.recovered.outputs.closed != '0' && steps.recovered.outputs.closed != ''
-        env:
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-        run: |
-          set -uo pipefail
-          { printf 'site-watch: знову зелене\n%s Київ\n\n' "$(TZ=Europe/Kyiv date '+%d.%m %H:%M')"
-            cat facts.txt
-          } > msg.txt
-          bash .github/send-telegram.sh msg.txt
-
-      - name: Daily summary
-        if: github.event.schedule == '0 6 * * *' || inputs.digest
-        env:
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -uo pipefail
-          since=$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ')
-          runs=$(gh run list --workflow site-watch.yml --limit 60 \
-                   --json createdAt,conclusion --jq "[.[] | select(.createdAt > \"$since\")] | length")
-          if [ -s problems.txt ]; then head="site-watch: за добу були проблеми"; else head="site-watch: сайт у нормі"; fi
-          { printf '%s\n%s Київ\n\n' "$head" "$(TZ=Europe/Kyiv date '+%d.%m %H:%M')"
-            cat facts.txt
-            printf '\nПеревірок за добу: %s\n' "${runs:-?}"
-          } > msg.txt
-          bash .github/send-telegram.sh msg.txt
