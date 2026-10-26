@@ -1,0 +1,14 @@
+---
+import { Image } from 'astro:assets';
+import { fmtDate } from '../lib';
+const { entry, section } = Astro.props;
+const d = entry.data;
+---
+<a class="card" href={`/${section}/${entry.id}/`}>
+  <Image class="card__img" src={d.cover} alt={d.coverAlt} widths={[400, 800]} sizes="(max-width: 768px) 100vw, 400px" />
+  <div class="card__meta eyebrow">
+    <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time>{d.sector && <> · {d.sector}</>}
+  </div>
+  <h2>{d.title}</h2>
+  <p>{d.description}</p>
+</a>

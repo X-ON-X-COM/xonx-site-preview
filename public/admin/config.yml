@@ -1,0 +1,86 @@
+# Content admin for x-on-x.com, served at /admin/.
+# Every "Publish" is a commit to main; GitHub Actions rebuilds the site in ~1-2 min.
+backend:
+  name: github
+  repo: X-ON-X-COM/xonx-site-preview
+  branch: main
+  commit_messages:
+    create: 'Content: new {{collection}} "{{slug}}"'
+    update: 'Content: update {{collection}} "{{slug}}"'
+    delete: 'Content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'Content: upload "{{path}}"'
+    deleteMedia: 'Content: delete "{{path}}"'
+
+site_url: https://www.x-on-x.com
+display_url: https://www.x-on-x.com
+logo:
+  src: /favicon.svg
+
+media_folder: public/img/uploads
+public_folder: /img/uploads
+
+# Photos get re-encoded on upload, so a 10 MB phone shot never lands in the repo.
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2400
+          height: 2400
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: cases
+    label: Cases
+    label_singular: Case
+    folder: src/content/cases
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    create: true
+    preview_path: 'cases/{{slug}}/'
+    sortable_fields: [date, title]
+    summary: '{{title}} · {{date}}'
+    fields:
+      - { name: draft, label: 'Draft (hidden from the site)', widget: boolean, default: true }
+      - { name: title, label: Title, widget: string, hint: 'Also the Google headline. Aim for under 60 characters.' }
+      - { name: description, label: Short description, widget: text, hint: 'Shown under the title, on the card and in Google results. 120-160 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: date, label: Publish date, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD' }
+      - { name: updated, label: Last substantive update, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD', required: false }
+      - { name: cover, label: Cover image, widget: image, hint: 'Landscape, at least 1600 px wide. Also used as the link preview.' }
+      - { name: coverAlt, label: Cover description (alt text), widget: string, hint: 'What is in the picture, in one sentence. Google and screen readers read this.' }
+      - { name: author, label: Author, widget: select, default: X-ON-X, options: [X-ON-X, Oleg Kotliar, Viktoriia Kotliar] }
+      - { name: tags, label: Tags, widget: list, required: false, hint: 'Topics, e.g. Tax, M&A, Relocation. Articles sharing a tag link to each other.' }
+      - { name: client, label: Client (leave empty to keep anonymous), widget: string, required: false }
+      - { name: sector, label: Sector, widget: select, required: false, options: [Fashion, Investments, Miltech, Other] }
+      - { name: body, label: Text, widget: markdown }
+  - name: insights
+    label: Insights
+    label_singular: Insight
+    folder: src/content/insights
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    create: true
+    preview_path: 'insights/{{slug}}/'
+    sortable_fields: [date, title]
+    summary: '{{title}} · {{date}}'
+    fields:
+      - { name: draft, label: 'Draft (hidden from the site)', widget: boolean, default: true }
+      - { name: title, label: Title, widget: string, hint: 'Also the Google headline. Aim for under 60 characters.' }
+      - { name: description, label: Short description, widget: text, hint: 'Shown under the title, on the card and in Google results. 120-160 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: date, label: Publish date, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD' }
+      - { name: updated, label: Last substantive update, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD', required: false }
+      - { name: cover, label: Cover image, widget: image, hint: 'Landscape, at least 1600 px wide. Also used as the link preview.' }
+      - { name: coverAlt, label: Cover description (alt text), widget: string, hint: 'What is in the picture, in one sentence. Google and screen readers read this.' }
+      - { name: author, label: Author, widget: select, default: X-ON-X, options: [X-ON-X, Oleg Kotliar, Viktoriia Kotliar] }
+      - { name: tags, label: Tags, widget: list, required: false, hint: 'Topics, e.g. Tax, M&A, Relocation. Articles sharing a tag link to each other.' }
+      - { name: body, label: Text, widget: markdown }

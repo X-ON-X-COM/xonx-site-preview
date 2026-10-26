@@ -1,0 +1,8 @@
+---
+import ArticlePage from '../../components/ArticlePage.astro';
+import { published } from '../../lib';
+export async function getStaticPaths() {
+  return (await published('cases')).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+---
+<ArticlePage entry={Astro.props.entry} section="cases" />

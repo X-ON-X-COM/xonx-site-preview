@@ -57,12 +57,12 @@ jobs:
 
           # 4. the served HTML is what this repo says it should be
           a=$(sha256sum served.html | cut -d' ' -f1)
-          b=$(sha256sum index.html  | cut -d' ' -f1)
+          b=$(sha256sum public/index.html  | cut -d' ' -f1)
           if [ "$a" != "$b" ]; then
             sleep 90   # a push may have landed while Fastly still had the old copy
             curl -sS -o served.html https://www.x-on-x.com/
             a=$(sha256sum served.html | cut -d' ' -f1)
-            [ "$a" = "$b" ] || fail "served HTML does not match index.html in this repo (served $a, repo $b)"
+            [ "$a" = "$b" ] || fail "served HTML does not match public/index.html in this repo (served $a, repo $b)"
           fi
 
           # 5. nothing third-party crept into the page

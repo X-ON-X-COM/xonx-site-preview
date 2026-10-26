@@ -1,0 +1,83 @@
+---
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string; // absolute URL of the link-preview picture
+  type?: 'website' | 'article';
+  jsonld?: object;
+}
+const { title, description, image, type = 'website', jsonld } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = image ?? new URL('/img/og.jpg?v=20260916h', Astro.site).href;
+const path = Astro.url.pathname;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<link rel="icon" href="/favicon.ico?v=20260916d" sizes="32x32">
+<link rel="icon" href="/favicon.svg?v=20260916d" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=20260916d">
+<meta name="theme-color" content="#FAFAF5">
+<meta property="og:type" content={type}>
+<meta property="og:site_name" content="X-ON-X">
+<meta property="og:url" content={canonical}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:image" content={ogImage}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={ogImage}>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:opsz,wght@14..32,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+{jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+</head>
+<body>
+<header class="xx-nav">
+  <a class="xx-nav__brand" href="/" aria-label="X-ON-X home">
+    <svg width="22" height="22" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+      <line x1="44" y1="44" x2="116" y2="116" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+      <line x1="116" y1="44" x2="44" y2="116" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="80" cy="80" r="6" fill="#C9FF33"/>
+    </svg>
+    <span class="xx-nav__wordmark">X-ON-X</span>
+  </a>
+  <nav class="xx-nav__links">
+    <a class="xx-nav__link" href="/#what-we-do">What We Do</a>
+    <a class:list={['xx-nav__link', { 'xx-nav__link--active': path.startsWith('/cases/') }]} href="/cases/">Cases</a>
+    <a class:list={['xx-nav__link', { 'xx-nav__link--active': path.startsWith('/insights/') }]} href="/insights/">Insights</a>
+  </nav>
+  <a class="xx-btn xx-btn--primary xx-btn--sm" href="https://t.me/yourxsolution" target="_blank" rel="noopener noreferrer">Come on in &rarr;</a>
+</header>
+
+<main>
+  <slot />
+</main>
+
+<footer class="xx-footer">
+  <div class="xx-footer__inner">
+    <div>
+      <div class="xx-footer__wordmark">X-ON-X</div>
+      <div class="xx-footer__tagline">Beyond Borders. Beyond Advisory.</div>
+    </div>
+    <nav class="xx-footer__links">
+      <a href="/#what-we-do">What We Do</a>
+      <a href="/cases/">Cases</a>
+      <a href="/insights/">Insights</a>
+      <a href="mailto:ok@x-on-x.com" class="xx-footer__mail">ok@x-on-x.com</a>
+    </nav>
+  </div>
+  <div class="xx-footer__bot">&copy; {new Date().getFullYear()} X-ON-X &middot; All rights reserved</div>
+</footer>
+</body>
+</html>
