@@ -6,6 +6,19 @@
   <meta name="robots" content="noindex">
   <title>X-ON-X | Content admin</title>
   <link rel="icon" href="/favicon.svg?v=20260916d" type="image/svg+xml">
+  <!-- Anti-clickjacking: GitHub Pages cannot send X-Frame-Options or
+       frame-ancestors, so the page stays hidden unless it is the top window.
+       Inside a frame it tries to break out, then stops loading so the CMS
+       (and the editor's GitHub session) never starts there. -->
+  <style id="anti-frame">html { display: none !important; }</style>
+  <script>
+    if (window.self === window.top) {
+      document.getElementById('anti-frame').remove();
+    } else {
+      try { window.top.location = window.self.location.href; } catch (e) {}
+      window.stop();
+    }
+  </script>
 </head>
 <body>
   <!-- Sveltia CMS: edits src/content/** in this repository through GitHub.
