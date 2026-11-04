@@ -2,7 +2,7 @@
 // One case in the designer's side-panel layout. Used twice: as the panel that
 // slides out of the home page's Recent Matters carousel, and as the body of the
 // case's own page (/cases/<slug>/). "Related Matters" carries every other case;
-// cases.js shows three of them at random (the first three without JavaScript).
+// cases.js shows three of them at random.
 import { getImage } from 'astro:assets';
 import { published } from '../lib';
 
@@ -11,12 +11,13 @@ const d = entry.data;
 const hero = await getImage({ src: d.cover, width: 1600, format: 'webp', quality: 88 });
 const pos = `--pos: ${d.coverPosition};` + (d.coverPositionMobile ? ` --pos-m: ${d.coverPositionMobile};` : '');
 
-const others = (await published('cases')).filter((e) => e.id !== entry.id);
-// Shuffled at build so the no-JavaScript fallback is not always the same three.
-for (let i = others.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [others[i], others[j]] = [others[j], others[i]];
-}
+// Every other case, in an order fixed per case: the build has to be repeatable
+// (site-watch compares the live home page with a fresh build), and cases.js
+// reshuffles them in the browser anyway. Without JavaScript the first three show.
+const rank = (id: string) => [...`${entry.id}|${id}`].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const others = (await published('cases'))
+  .filter((e) => e.id !== entry.id)
+  .sort((a, b) => rank(a.id) - rank(b.id));
 const related = await Promise.all(
   others.map(async (e) => ({
     e,

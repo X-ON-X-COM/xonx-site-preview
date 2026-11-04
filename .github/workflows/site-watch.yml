@@ -2,7 +2,7 @@ name: site-watch
 
 # Hourly outside check of the live site: is it up, does it still redirect the way
 # we set it up, is the certificate fresh, and is the HTML that Fastly serves still
-# byte-identical to what is committed here. The last one is the defacement check:
+# byte-identical to a fresh build of what is committed here. The last one is the defacement check:
 # if someone pushes to this repo or takes the domain over, the hash stops matching.
 # Failures open (or comment on) an issue, which mails everyone watching the repo.
 
@@ -25,6 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # The live home page is public/index.html with the cases put in at build
+      # time, so the reference is a fresh build, not the file itself.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npx astro build
 
       - name: Check the live site
         id: check
@@ -57,12 +64,12 @@ jobs:
 
           # 4. the served HTML is what this repo says it should be
           a=$(sha256sum served.html | cut -d' ' -f1)
-          b=$(sha256sum public/index.html  | cut -d' ' -f1)
+          b=$(sha256sum dist/index.html | cut -d' ' -f1)
           if [ "$a" != "$b" ]; then
             sleep 90   # a push may have landed while Fastly still had the old copy
             curl -sS -o served.html https://www.x-on-x.com/
             a=$(sha256sum served.html | cut -d' ' -f1)
-            [ "$a" = "$b" ] || fail "served HTML does not match public/index.html in this repo (served $a, repo $b)"
+            [ "$a" = "$b" ] || fail "served HTML does not match a fresh build of this repo (served $a, repo $b)"
           fi
 
           # 5. nothing third-party crept into the page
