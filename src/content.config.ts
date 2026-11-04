@@ -25,6 +25,9 @@ const insights = defineCollection({
   schema: (ctx) => z.object(common(ctx)),
 });
 
+// A case is also a card in the home page's "Recent Matters" carousel and the
+// side panel that opens from it; scripts/home-cases.mjs puts them there at build.
+const figure = z.object({ number: z.string(), label: z.string() });
 const cases = defineCollection({
   loader: folder('./src/content/cases'),
   schema: (ctx) =>
@@ -32,6 +35,22 @@ const cases = defineCollection({
       ...common(ctx),
       client: z.string().optional(),
       sector: z.string().optional(),
+      order: z.number().default(100),
+      tab: z.string(),
+      category: z.string(),
+      cardCategory: z.string().optional(),
+      cardStat: figure,
+      keyFigure: figure,
+      overview: z.object({
+        scope: z.string(),
+        jurisdictions: z.string(),
+        practiceAreas: z.string(),
+        clientProfile: z.string(),
+      }),
+      cta: z.object({ title: z.string(), text: z.string() }),
+      coverPosition: z.string().default('center 70%'),
+      coverPositionMobile: z.string().optional(),
+      anonymous: z.boolean().default(false),
     }),
 });
 

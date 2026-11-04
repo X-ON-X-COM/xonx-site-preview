@@ -1,0 +1,43 @@
+/* ── RECENT MATTERS — mobile display (from home-standalone-final-mobile-v2), scoped to this section ── */
+@media (max-width: 920px) {
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard__media { aspect-ratio: 3 / 4 !important; height: auto !important; }
+}
+@media (max-width: 768px) {
+  [data-showcase="evidence"].xx-showcase--band > * { padding-left: 20px !important; padding-right: 20px !important; }
+  [data-showcase="evidence"].xx-showcase--band { padding: 48px 0 64px !important; }
+  /* Carousel: horizontal scroll */
+  [data-showcase="evidence"].xx-showcase--v35 .xx-showcase__track {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory !important;
+  }
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard {
+    flex: 0 0 82% !important;
+    scroll-snap-align: start !important;
+    opacity: 1 !important;
+  }
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard.active { flex-grow: 0 !important; }
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard__media { height: auto !important; min-height: 0 !important; aspect-ratio: 3 / 4 !important; }
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard__cap {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* Hide tab bar on mobile — topic shown on picture instead */
+  [data-showcase="evidence"].xx-showcase--v35 .xx-showcase__tabs { display: none !important; }
+  /* Matter caption — cat at top, title+stat grouped at bottom */
+  [data-showcase="evidence"] .xx-pcard__cap {
+    top: 0 !important;
+    bottom: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: linear-gradient(to bottom, rgba(17,17,22,0.45) 0%, rgba(17,17,22,0) 25%, rgba(17,17,22,0) 55%, rgba(17,17,22,0.77) 100%) !important;
+  }
+  [data-showcase="evidence"] .xx-pcard__cat { flex: 0 0 auto !important; }
+  [data-showcase="evidence"] .xx-pcard__title { margin-top: auto !important; }
+  [data-showcase="evidence"] .xx-pcard__stat { flex: 0 0 auto !important; }
+}
+@media (max-width: 480px) {
+  [data-showcase="evidence"].xx-showcase--v35 .xx-pcard { flex: 0 0 90% !important; }
+}

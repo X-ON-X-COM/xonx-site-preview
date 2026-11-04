@@ -1,0 +1,70 @@
+---
+// One case in the designer's side-panel layout. Used twice: as the panel that
+// slides out of the home page's Recent Matters carousel, and as the body of the
+// case's own page (/cases/<slug>/). "Related Matters" carries every other case;
+// cases.js shows three of them at random (the first three without JavaScript).
+import { getImage } from 'astro:assets';
+import { published } from '../lib';
+
+const { entry, mode = 'panel' }: { entry: any; mode?: 'panel' | 'page' } = Astro.props;
+const d = entry.data;
+const hero = await getImage({ src: d.cover, width: 1600, format: 'webp', quality: 88 });
+const pos = `--pos: ${d.coverPosition};` + (d.coverPositionMobile ? ` --pos-m: ${d.coverPositionMobile};` : '');
+
+const others = (await published('cases')).filter((e) => e.id !== entry.id);
+// Shuffled at build so the no-JavaScript fallback is not always the same three.
+for (let i = others.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [others[i], others[j]] = [others[j], others[i]];
+}
+const related = await Promise.all(
+  others.map(async (e) => ({
+    e,
+    img: await getImage({ src: e.data.cover, width: 400, height: 300, fit: 'cover', format: 'webp' }),
+  })),
+);
+const o = d.overview;
+---
+<div class:list={['popup', { 'popup--page': mode === 'page' }]} id={`popup-${entry.id}`} data-case-panel={entry.id}>
+  {mode === 'panel' && (
+    <>
+      <div class="popup__drag-handle"></div>
+      <div class="popup__close-bar"><button class="popup__close" type="button" data-case-close aria-label="Close">&#x21A9;&#xFE0E;</button></div>
+    </>
+  )}
+  <div class="popup__hero">
+    <img src={hero.src} alt={d.coverAlt} style={pos} loading={mode === 'page' ? 'eager' : 'lazy'} decoding="async">
+    <div class="popup__hero-gradient"></div>
+    <div class="popup__hero-meta">
+      <span class="popup__hero-cat">{d.category}</span>
+      {mode === 'page' ? <h1 class="popup__hero-title">{d.title}</h1> : <h2 class="popup__hero-title">{d.title}</h2>}
+    </div>
+  </div>
+
+  <div class="popup__stats popup__stats--single">
+    <div class="popup__stat"><div class="popup__stat-num">{d.keyFigure.number}</div><div class="popup__stat-label">{d.keyFigure.label}</div></div>
+  </div>
+
+  <div class="popup__sidebar-info"><h4>Engagement Overview</h4><div class="popup__info-grid">
+    <div><div class="popup__info-label">Scope</div><div class="popup__info-value">{o.scope}</div></div>
+    <div><div class="popup__info-label">Jurisdictions</div><div class="popup__info-value">{o.jurisdictions}</div></div>
+    <div><div class="popup__info-label">Practice Areas</div><div class="popup__info-value">{o.practiceAreas}</div></div>
+    <div><div class="popup__info-label">Client Profile</div><div class="popup__info-value">{o.clientProfile}</div></div>
+  </div></div>
+
+  <div class="popup__body" set:html={entry.rendered?.html} />
+
+  {related.length > 0 && (
+    <div class="popup__related"><h4>Related Matters</h4><div class="popup__related-row">
+      {related.map(({ e, img }, i) => (
+        <a class="popup__related-card" href={`/cases/${e.id}/`} data-case={e.id} hidden={i >= 3}>
+          <img src={img.src} alt="" loading="lazy" decoding="async" width="400" height="300">
+          <div class="popup__related-card-cat">{e.data.cardCategory ?? e.data.category}</div>
+          <div class="popup__related-card-title">{e.data.description}</div>
+        </a>
+      ))}
+    </div></div>
+  )}
+
+  <div class="popup__cta-section"><h3>{d.cta.title}</h3><p>{d.cta.text}</p><a class="xx-btn xx-btn--primary" href="https://t.me/yourxsolution" target="_blank" rel="noopener noreferrer">Contact us &rarr;</a></div>
+</div>

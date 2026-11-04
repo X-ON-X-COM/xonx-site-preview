@@ -41,27 +41,58 @@ collections:
   - name: cases
     label: Cases
     label_singular: Case
+    description: 'Every published case is a card in Recent Matters on the home page (in the "Order on home page" order), the panel that card opens, and its own page at /cases/<name>/. Related Matters under each case are three other cases picked at random.'
     folder: src/content/cases
     path: '{{slug}}/index'
     media_folder: ''
     public_folder: ''
     create: true
     preview_path: 'cases/{{slug}}/'
-    sortable_fields: [date, title]
-    summary: '{{title}} · {{date}}'
+    sortable_fields: [order, title, date]
+    summary: '{{order}}. {{tab}} · {{title}}'
     fields:
       - { name: draft, label: 'Draft (hidden from the site)', widget: boolean, default: true }
-      - { name: title, label: Title, widget: string, hint: 'Also the Google headline. Aim for under 60 characters.' }
-      - { name: description, label: Short description, widget: text, hint: 'Shown under the title, on the card and in Google results. 120-160 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: order, label: Order on home page, widget: number, value_type: int, default: 100, hint: '1 is the first card. Cases with the same number go newest first.' }
+      - { name: tab, label: Tab name on home page, widget: string, hint: 'Short label above the carousel, e.g. Bazhane or UHNWI.' }
+      - { name: title, label: Title in the panel and on the page, widget: string, hint: 'Also the Google headline. Aim for under 60 characters.' }
+      - { name: description, label: Headline on the home card, widget: text, hint: 'Shown on the card, under Related Matters and in Google results. Up to 200 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: category, label: Category in the panel, widget: string, hint: 'e.g. Fashion & Retail' }
+      - { name: cardCategory, label: Category on the home card (if different), widget: string, required: false }
+      - name: cardStat
+        label: Figure on the home card
+        widget: object
+        fields:
+          - { name: number, label: Number, widget: string, hint: 'e.g. €150 mln, 28, 1st' }
+          - { name: label, label: Caption, widget: string, hint: 'e.g. markets · UA, US, UK, EU' }
+      - name: keyFigure
+        label: Figure under the panel picture
+        widget: object
+        fields:
+          - { name: number, label: Number, widget: string }
+          - { name: label, label: Caption, widget: string }
+      - name: overview
+        label: Engagement Overview
+        widget: object
+        fields:
+          - { name: scope, label: Scope, widget: text }
+          - { name: jurisdictions, label: Jurisdictions, widget: string }
+          - { name: practiceAreas, label: Practice Areas, widget: string, hint: 'Separate with " · "' }
+          - { name: clientProfile, label: Client Profile, widget: text }
+      - { name: body, label: 'Text (The situation / What we did / The outcome as headings)', widget: markdown }
+      - name: cta
+        label: Dark box at the end
+        widget: object
+        fields:
+          - { name: title, label: Question, widget: string, hint: 'e.g. Expanding into the EU?' }
+          - { name: text, label: Text, widget: text }
+      - { name: cover, label: Picture, widget: image, hint: 'Portrait or landscape, at least 1200 px wide. Used on the card, in the panel and as the link preview.' }
+      - { name: coverAlt, label: Picture description (alt text), widget: string, hint: 'What is in the picture, in one sentence.' }
+      - { name: coverPosition, label: Picture crop in the panel, widget: string, required: false, default: 'center 70%', hint: 'Which part of the picture stays in view: "center 70%" means 70% down from the top.' }
+      - { name: coverPositionMobile, label: Picture crop on phones, widget: string, required: false, hint: 'For logo pictures use "center 90%" so the logo clears the title.' }
+      - { name: anonymous, label: 'Anonymous client (soft blur on the card)', widget: boolean, default: false }
+      - { name: client, label: Client name (leave empty to keep anonymous), widget: string, required: false }
       - { name: date, label: Publish date, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD' }
       - { name: updated, label: Last substantive update, widget: datetime, time_format: false, date_format: 'DD.MM.YYYY', format: 'YYYY-MM-DD', required: false }
-      - { name: cover, label: Cover image, widget: image, hint: 'Landscape, at least 1600 px wide. Also used as the link preview.' }
-      - { name: coverAlt, label: Cover description (alt text), widget: string, hint: 'What is in the picture, in one sentence. Google and screen readers read this.' }
-      - { name: author, label: Author, widget: select, default: X-ON-X, options: [X-ON-X, Oleg Kotliar, Viktoriia Kotliar] }
-      - { name: tags, label: Tags, widget: list, required: false, hint: 'Topics, e.g. Tax, M&A, Relocation. Articles sharing a tag link to each other.' }
-      - { name: client, label: Client (leave empty to keep anonymous), widget: string, required: false }
-      - { name: sector, label: Sector, widget: select, required: false, options: [Fashion, Investments, Miltech, Other] }
-      - { name: body, label: Text, widget: markdown }
   - name: insights
     label: Insights
     label_singular: Insight

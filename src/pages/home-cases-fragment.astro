@@ -1,0 +1,32 @@
+---
+// Not a page anyone visits: scripts/home-cases.mjs reads it after the build,
+// moves its parts into the home page's Recent Matters section and deletes it.
+import { getImage } from 'astro:assets';
+import CasePanel from '../components/CasePanel.astro';
+import { published } from '../lib';
+
+const cases = (await published('cases')).sort((a, b) => a.data.order - b.data.order);
+const cards = await Promise.all(
+  cases.map(async (e) => ({ e, img: await getImage({ src: e.data.cover, width: 1200, format: 'webp', quality: 88 }) })),
+);
+---
+<!--cases:tabs-->
+{cases.map((e) => <button class="xx-showcase__tab" type="button"><span class="xx-showcase__bar"></span>{e.data.tab}</button>)}
+<!--/cases:tabs-->
+<!--cases:cards-->
+{cards.map(({ e, img }) => (
+  <a class="xx-pcard" href={`/cases/${e.id}/`} data-case={e.id} data-anon={e.data.anonymous ? '' : undefined}>
+    <div class="xx-pcard__media"><img src={img.src} alt={e.data.coverAlt} loading="lazy" decoding="async">
+      <div class="xx-pcard__cap">
+        <span class="xx-pcard__cat">{e.data.cardCategory ?? e.data.category}</span>
+        <h3 class="xx-pcard__title">{e.data.description}</h3>
+        <div class="xx-pcard__stat"><span class="xx-pcard__num">{e.data.cardStat.number}</span><span class="xx-pcard__unit">{e.data.cardStat.label}</span></div>
+      </div>
+    </div>
+  </a>
+))}
+<!--/cases:cards-->
+<!--cases:panels-->
+<div class="popup-backdrop" id="caseBackdrop"></div>
+{cases.map((e) => <CasePanel entry={e} />)}
+<!--/cases:panels-->

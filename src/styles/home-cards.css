@@ -1,0 +1,7 @@
+/* Recent Matters cards. Anonymous matters get a soft blur so the eye goes to the text. */
+.xx-showcase--v35 .xx-pcard[data-anon].active .xx-pcard__media img,
+.xx-showcase--v35 .xx-pcard[data-anon]:hover .xx-pcard__media img {
+  filter: grayscale(0.35) contrast(1.04) brightness(0.92) blur(2px) !important;
+  transform: scale(1.03) !important;
+}
+.xx-showcase--v35 .xx-pcard[data-anon] .xx-pcard__media { overflow: hidden !important; }
