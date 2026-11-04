@@ -228,3 +228,14 @@
   --t-mono-sm:  500 10px/1.4  var(--font-mono);
   --t-mono-xs:  400 9px/1.4   var(--font-mono);
 }
+
+/* ── Closed panels wait just off screen; without this their shadows (eight of
+   them, stacked) bled into the page as a grey strip on the left edge, and on
+   phones along the bottom. Hidden once the slide-out has finished. ── */
+.popup { visibility: hidden; box-shadow: none; transition: transform 450ms cubic-bezier(.4,0,.2,1), visibility 0s linear 450ms; }
+.popup.active { visibility: visible; box-shadow: 12px 0 60px rgba(17,17,22,0.18); transition-delay: 0s, 0s; }
+@media (max-width: 920px) {
+  .popup { transition: transform 420ms cubic-bezier(.32,.72,.24,1), visibility 0s linear 420ms !important; box-shadow: none !important; }
+  .popup.active { transition-delay: 0s, 0s !important; box-shadow: 0 -12px 60px rgba(17,17,22,0.25) !important; }
+}
+.popup.popup--page { visibility: visible; box-shadow: none !important; }
