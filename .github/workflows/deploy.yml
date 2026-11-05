@@ -21,6 +21,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # the "built" branch below
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,6 +31,19 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx astro build
+      # The marketing bot's site-watch compares the live home page with a copy it
+      # can fetch from GitHub. The live page is public/index.html with the cases
+      # put in at build time, so the copy is the built file, kept on the orphan
+      # branch "built" (one commit, replaced on every deploy).
+      - name: Keep the built home page on the "built" branch
+        run: |
+          mkdir -p "$RUNNER_TEMP/built" && cp dist/index.html dist/m.html "$RUNNER_TEMP/built/"
+          cd "$RUNNER_TEMP/built"
+          git init -q -b built
+          git add index.html m.html
+          git -c user.name=github-actions -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
+            commit -qm "Built home page of ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" built
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
