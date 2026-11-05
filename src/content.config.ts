@@ -33,6 +33,8 @@ const cases = defineCollection({
   schema: (ctx) =>
     z.object({
       ...common(ctx),
+      // The line under the title in Google results. Without it, the card headline is used.
+      seoDescription: z.string().max(200).optional(),
       client: z.string().optional(),
       sector: z.string().optional(),
       order: z.number().default(100),

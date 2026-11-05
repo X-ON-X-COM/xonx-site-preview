@@ -55,7 +55,8 @@ collections:
       - { name: order, label: Order on home page, widget: number, value_type: int, default: 100, hint: '1 is the first card. Cases with the same number go newest first.' }
       - { name: tab, label: Tab name on home page, widget: string, hint: 'Short label above the carousel, e.g. Bazhane or UHNWI.' }
       - { name: title, label: Title in the panel and on the page, widget: string, hint: 'Also the Google headline. Aim for under 60 characters.' }
-      - { name: description, label: Headline on the home card, widget: text, hint: 'Shown on the card, under Related Matters and in Google results. Up to 200 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: description, label: Headline on the home card, widget: text, hint: 'Shown on the card and under Related Matters. Also in Google results if the next field is empty. Up to 200 characters.', pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters'] }
+      - { name: seoDescription, label: Description for Google, widget: text, required: false, hint: 'One or two sentences under the title in Google results and in link previews: what the problem was and what changed. 120-160 characters. If empty, the card headline is used.', pattern: ['^[\s\S]{50,200}$', 'Between 50 and 200 characters'] }
       - { name: category, label: Category in the panel, widget: string, hint: 'e.g. Fashion & Retail' }
       - { name: cardCategory, label: Category on the home card (if different), widget: string, required: false }
       - name: cardStat

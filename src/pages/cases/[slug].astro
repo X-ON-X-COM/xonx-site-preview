@@ -9,13 +9,14 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const d = entry.data;
+const metaDescription = d.seoDescription ?? d.description;
 const og = await getImage({ src: d.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
 const site = Astro.site!;
 const url = new URL(`/cases/${entry.id}/`, site).href;
 const jsonld = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'Article', headline: d.title, description: d.description, image: [new URL(og.src, site).href],
+    { '@type': 'Article', headline: d.title, description: metaDescription, image: [new URL(og.src, site).href],
       datePublished: d.date.toISOString(), dateModified: (d.updated ?? d.date).toISOString(),
       author: { '@id': 'https://www.x-on-x.com/#org' }, publisher: { '@id': 'https://www.x-on-x.com/#org' },
       mainEntityOfPage: url, inLanguage: 'en' },
@@ -28,7 +29,7 @@ const jsonld = {
   ],
 };
 ---
-<Base title={`${d.title} | X-ON-X`} description={d.description} image={new URL(og.src, site).href} type="article" jsonld={jsonld}>
+<Base title={`${d.title} | X-ON-X`} description={metaDescription} image={new URL(og.src, site).href} type="article" jsonld={jsonld}>
   <div class="case-wrap">
     <div class="eyebrow case-crumbs"><a href="/">X-ON-X</a> / <a href="/cases/">Cases</a></div>
     <CasePanel entry={entry} mode="page" />
