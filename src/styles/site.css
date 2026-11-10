@@ -152,3 +152,8 @@ a { color: inherit; }
   border-top: 1px solid rgba(255,255,255,0.1);
   font: 400 11px/1.4 var(--font-mono); letter-spacing: 1px;
 }
+
+/* EN · UA switcher (scripts/ua.mjs puts it into the header), as on the home page */
+.xx-lang { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--fg3); white-space: nowrap; }
+.xx-lang strong { color: var(--fg1); font-weight: 500; }
+.xx-lang a:hover { color: var(--fg1) !important; }
