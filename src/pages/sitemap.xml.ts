@@ -1,10 +1,15 @@
 import type { APIRoute } from 'astro';
+import { readdirSync } from 'node:fs';
 import { published, type Section } from '../lib';
 
-// Home page, the two section pages, every published article. m.html stays out:
-// it carries a canonical to the home page.
+// Home page, the service pages (public/services/<slug>/, written by
+// scripts/import-services.mjs), the two section pages, every published article.
+// m.html stays out: it carries a canonical to the home page.
 export const GET: APIRoute = async ({ site }) => {
   const rows: [string, Date | undefined][] = [['/', undefined]];
+  for (const d of readdirSync('public/services', { withFileTypes: true })) {
+    if (d.isDirectory() && d.name !== 'img') rows.push([`/services/${d.name}/`, undefined]);
+  }
   for (const section of ['cases', 'insights'] as Section[]) {
     const entries = await published(section);
     rows.push([`/${section}/`, entries[0]?.data.date]);

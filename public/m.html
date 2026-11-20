@@ -1092,7 +1092,8 @@ body { background: var(--cream) !important; }
     margin-top: 8px !important;
   }
   .xx-nav__links { display: none !important; }
-  .xx-nav__right .xx-lang { display: none !important; }
+  /* EN · UA stays on phones, left of the burger (the designer's build hid it). */
+  .xx-nav__right .xx-lang { display: inline-block !important; margin-right: 14px; }
   .xx-nav__right > .xx-btn { display: none !important; }
   /* Burger icon — X-ON-X style: two hairlines + small lime dot */
   .xx-nav__burger {
@@ -2040,7 +2041,7 @@ body { background: var(--cream) !important; }
             <div class="xx-lane__hint">&ldquo;What I&rsquo;m building.&rdquo;</div>
           </div>
           <div class="xx-trigger-dock">
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/entering-new-market/">
               <span class="xx-trigger-btn__num">B/01</span>
               <h3 class="xx-trigger-btn__title">Entering a New Market</h3>
               <p class="xx-trigger-btn__desc">You&rsquo;ve built something real. Now you&rsquo;re taking it cross-border &ndash; new jurisdictions, new rules, new complexity.</p>
@@ -2051,7 +2052,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/fundraising/">
               <span class="xx-trigger-btn__num">B/02</span>
               <h3 class="xx-trigger-btn__title">Fundraising</h3>
               <p class="xx-trigger-btn__desc">Raising capital for the business &ndash; structuring rounds, investor negotiations, and cross-border investment vehicles.</p>
@@ -2062,7 +2063,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/buying-selling-assets/">
               <span class="xx-trigger-btn__num">B/03</span>
               <h3 class="xx-trigger-btn__title">Buying or Selling Assets</h3>
               <p class="xx-trigger-btn__desc">Cross-border M&amp;A, asset acquisitions, disposals, and deal structuring &ndash; from due diligence to closing.</p>
@@ -2073,7 +2074,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/forming-partnerships/">
               <span class="xx-trigger-btn__num">B/04</span>
               <h3 class="xx-trigger-btn__title">Forming Partnerships</h3>
               <p class="xx-trigger-btn__desc">Partnership structuring, governance, and exit design across multiple jurisdictions.</p>
@@ -2094,7 +2095,7 @@ body { background: var(--cream) !important; }
             <div class="xx-lane__hint">&ldquo;Personal and family &ndash; across borders.&rdquo;</div>
           </div>
           <div class="xx-trigger-dock">
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/business-ownership/">
               <span class="xx-trigger-btn__num">I/01</span>
               <h3 class="xx-trigger-btn__title">Business Ownership</h3>
               <p class="xx-trigger-btn__desc">Structuring and protecting personal stakes in businesses &ndash; shareholder agreements, governance, and exit planning.</p>
@@ -2105,7 +2106,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/relocation/">
               <span class="xx-trigger-btn__num">I/02</span>
               <h3 class="xx-trigger-btn__title">Relocation</h3>
               <p class="xx-trigger-btn__desc">Tax residency mapping, business restructuring around relocation, immigration, and banking setup.</p>
@@ -2116,7 +2117,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/investment-portfolio/">
               <span class="xx-trigger-btn__num">I/03</span>
               <h3 class="xx-trigger-btn__title">Investment Portfolio</h3>
               <p class="xx-trigger-btn__desc">Personal holding vehicles, investment structuring, and tax-efficient portfolio management across jurisdictions.</p>
@@ -2127,7 +2128,7 @@ body { background: var(--cream) !important; }
               </div>
               <span class="xx-trigger-btn__arrow">&rarr;</span>
             </a>
-            <a class="xx-trigger-btn" href="#">
+            <a class="xx-trigger-btn" href="/services/succession/">
               <span class="xx-trigger-btn__num">I/04</span>
               <h3 class="xx-trigger-btn__title">Succession</h3>
               <p class="xx-trigger-btn__desc">Cross-border succession, wealth transfer, and family governance for the long term.</p>
@@ -2326,14 +2327,14 @@ body { background: var(--cream) !important; }
       </div>
       <div class="xx-footer__col">
         <div class="xx-footer__col-title">What We Do</div>
-        <a href="#">Entering a New Market</a>
-        <a href="#">Fundraising</a>
-        <a href="#">Buying or Selling Assets</a>
-        <a href="#">Forming Partnerships</a>
-        <a href="#">Business Interests</a>
-        <a href="#">Relocation</a>
-        <a href="#">Private Portfolio</a>
-        <a href="#">Succession</a>
+        <a href="/services/entering-new-market/">Entering a New Market</a>
+        <a href="/services/fundraising/">Fundraising</a>
+        <a href="/services/buying-selling-assets/">Buying or Selling Assets</a>
+        <a href="/services/forming-partnerships/">Forming Partnerships</a>
+        <a href="/services/business-ownership/">Business Interests</a>
+        <a href="/services/relocation/">Relocation</a>
+        <a href="/services/investment-portfolio/">Private Portfolio</a>
+        <a href="/services/succession/">Succession</a>
       </div>
       <div class="xx-footer__col">
         <div class="xx-footer__col-title">Firm</div>

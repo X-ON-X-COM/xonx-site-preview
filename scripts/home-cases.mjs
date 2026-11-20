@@ -1,8 +1,8 @@
-// Puts the cases from src/content/cases into the home page after every build:
-// the tabs and cards of the "Recent Matters" carousel and the side panel each
-// card opens. The home builds in public/ stay as the designer delivered them;
-// only these parts are replaced, in the built copies under dist/.
-import { readFile, writeFile, rm } from 'node:fs/promises';
+// Puts the cases from src/content/cases into the home page and every service
+// page after each build: the tabs and cards of the "Recent Matters" carousel and
+// the side panel each card opens. The pages in public/ stay as the designer
+// delivered them; only these parts are replaced, in the built copies in dist/.
+import { readFile, writeFile, rm, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const FRAGMENT = 'home-cases-fragment';
@@ -44,13 +44,18 @@ export default function homeCases() {
         const parts = { tabs: part(frag, 'tabs'), cards: part(frag, 'cards'), panels: part(frag, 'panels') };
         const common = (await css('cases.css')) + '\n' + (await css('home-cards.css'));
         const desktopOnly = await css('home-cards-desktop.css');
-        for (const [file, style] of [['index.html', common + '\n' + desktopOnly], ['m.html', common]]) {
+        // Service pages are one responsive file each and carry the designer's
+        // own phone rules for this section, so they take the common styles only.
+        const services = (await readdir(`${root}services`, { withFileTypes: true }))
+          .filter((d) => d.isDirectory() && d.name !== 'img')
+          .map((d) => [`services/${d.name}/index.html`, common]);
+        for (const [file, style] of [['index.html', common + '\n' + desktopOnly], ['m.html', common], ...services]) {
           const path = `${root}${file}`;
           await writeFile(path, inject(await readFile(path, 'utf8'), file, { ...parts, style }));
         }
         await rm(fragDir, { recursive: true });
         const n = (parts.cards.match(/class="xx-pcard"/g) || []).length;
-        logger.info(`${n} cases placed on index.html and m.html`);
+        logger.info(`${n} cases placed on index.html, m.html and ${services.length} service pages`);
       },
     },
   };
